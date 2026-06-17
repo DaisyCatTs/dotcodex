@@ -30,6 +30,7 @@ The current stable public distribution is defined in `release/skills.json`:
 - `brainstorming`
 - `build-like-iphone-team`
 - `executing-plans`
+- `session-distiller`
 - `systematic-debugging`
 - `worktree-delivery`
 - `writing-plans`
@@ -39,6 +40,8 @@ Together they restore the intended closed-loop workflow:
 `brainstorming -> writing-plans -> executing-plans -> behavior-driven-development / agent-team-driven-development -> verification`
 
 `worktree-delivery` complements that loop at handoff time by making branch-sync and merge readiness safer in multi-worktree repos.
+
+`session-distiller` turns long or important Codex conversations into durable learning artifacts, project knowledge, reusable workflows, memory proposals, and candidate skills.
 
 ## Repo-Local Use
 

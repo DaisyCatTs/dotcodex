@@ -9,6 +9,7 @@ const expectedStableSkills = [
   'brainstorming',
   'build-like-iphone-team',
   'executing-plans',
+  'session-distiller',
   'systematic-debugging',
   'worktree-delivery',
   'writing-plans',

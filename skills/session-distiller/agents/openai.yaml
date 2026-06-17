@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Distiller"
+  short_description: "Distill long sessions into reusable knowledge"
+  default_prompt: "Use $session-distiller to extract durable lessons and reusable artifacts from this conversation."
