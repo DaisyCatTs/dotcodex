@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import { existsSync, lstatSync, mkdtempSync, readFileSync, readdirSync, readlinkSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -46,6 +46,32 @@ test('installer copies only published stable skills into target codex directory'
 
     assert.equal(existsSync(join(targetDir, 'brainstorming', 'SKILL.md')), true, 'brainstorming should be part of the installed closed loop')
     assert.equal(existsSync(join(targetDir, 'writing-plans', 'SKILL.md')), true, 'writing-plans should be part of the installed closed loop')
+  }
+  finally {
+    rmSync(tempRoot, { recursive: true, force: true })
+  }
+})
+
+test('installer can symlink stable skills to source skills for local development', () => {
+  const tempRoot = mkdtempSync(join(tmpdir(), 'dotcodex-link-'))
+  const targetDir = join(tempRoot, 'skills')
+
+  try {
+    const result = runNode(['scripts/install.mjs', '--target', targetDir, '--link'])
+    assert.equal(result.status, 0, result.stderr || result.stdout)
+
+    const manifest = JSON.parse(readFileSync(new URL('../release/skills.json', import.meta.url), 'utf8'))
+
+    for (const skillName of manifest.skills) {
+      const installedPath = join(targetDir, skillName)
+      assert.equal(lstatSync(installedPath).isSymbolicLink(), true, `expected symlink for ${skillName}`)
+      assert.equal(
+        readlinkSync(installedPath),
+        new URL(`../.agents/skills/${skillName}/`, import.meta.url).pathname.replace(/\/$/, ''),
+        `expected ${skillName} to link to source skill`,
+      )
+      assert.equal(existsSync(join(installedPath, 'SKILL.md')), true, `linked skill should expose SKILL.md for ${skillName}`)
+    }
   }
   finally {
     rmSync(tempRoot, { recursive: true, force: true })

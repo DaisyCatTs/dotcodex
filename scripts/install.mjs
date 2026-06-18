@@ -20,6 +20,11 @@ function parseArgs(argv) {
       continue
     }
 
+    if (arg === '--link') {
+      options.link = true
+      continue
+    }
+
     if (arg === '-h' || arg === '--help') {
       options.help = true
       continue
@@ -35,11 +40,12 @@ function printHelp() {
   process.stdout.write(`Install dotcodex stable skills into a Codex profile.
 
 Usage:
-  node scripts/install.mjs [--target <dir>] [--repo-root <dir>]
+  node scripts/install.mjs [--target <dir>] [--repo-root <dir>] [--link]
 
 Options:
   --target <dir>     Install into a custom Codex skills directory
   --repo-root <dir>  Use a custom repository root
+  --link             Symlink installed skills to .agents/skills instead of copying
   -h, --help         Show this help message
 `)
 }
@@ -54,9 +60,11 @@ async function main() {
   const result = await installStableSkills({
     repoRoot: options.repoRoot ? resolveRepoRoot(options.repoRoot) : undefined,
     targetDir: options.targetDir,
+    link: options.link,
   })
 
-  process.stdout.write(`Installed ${result.skills.length} stable skills into ${result.targetDir}\n`)
+  const action = result.link ? 'Linked' : 'Installed'
+  process.stdout.write(`${action} ${result.skills.length} stable skills into ${result.targetDir}\n`)
   for (const skillName of result.skills) {
     process.stdout.write(`${skillName}\n`)
   }

@@ -30,6 +30,7 @@ The current stable public distribution is defined in `release/skills.json`:
 - `brainstorming`
 - `build-like-iphone-team`
 - `executing-plans`
+- `interview-coach`
 - `session-distiller`
 - `systematic-debugging`
 - `worktree-delivery`
@@ -40,6 +41,8 @@ Together they restore the intended closed-loop workflow:
 `brainstorming -> writing-plans -> executing-plans -> behavior-driven-development / agent-team-driven-development -> verification`
 
 `worktree-delivery` complements that loop at handoff time by making branch-sync and merge readiness safer in multi-worktree repos.
+
+`interview-coach` is a reusable preparation workflow for senior interview Q&A, resume/JD-based review, first-principles answer depth, terminology explanation, and concept comparison.
 
 `session-distiller` turns long or important Codex conversations into durable learning artifacts, project knowledge, reusable workflows, memory proposals, and candidate skills.
 
@@ -70,6 +73,12 @@ Use `--target` to install into a different Codex profile directory:
 
 ```bash
 ./install.sh --target /tmp/custom-codex/skills
+```
+
+Use `--link` during local development to keep installed skills symlinked to `.agents/skills`:
+
+```bash
+./install.sh --link
 ```
 
 ### Option 2: `pnpx skills add`

@@ -1,4 +1,4 @@
-import { copyFile, mkdir, readFile, readdir, rm } from 'node:fs/promises'
+import { copyFile, mkdir, readFile, readdir, rm, symlink } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
@@ -131,6 +131,7 @@ function resolveInstallSourceDir(repoRoot, skillName) {
 export async function installStableSkills({
   repoRoot = DEFAULT_REPO_ROOT,
   targetDir,
+  link = false,
 } = {}) {
   const root = resolveRepoRoot(repoRoot)
   const installTargetDir = resolveInstallTargetDir(targetDir)
@@ -139,9 +140,22 @@ export async function installStableSkills({
   await mkdir(installTargetDir, { recursive: true })
 
   for (const skillName of stableSkills) {
-    const sourceDir = resolveInstallSourceDir(root, skillName)
+    const sourceDir = link
+      ? resolveSourceSkillDir(root, skillName)
+      : resolveInstallSourceDir(root, skillName)
     const destinationDir = join(installTargetDir, skillName)
+
+    if (!existsSync(sourceDir)) {
+      throw new Error(`Missing source skill: ${sourceDir}`)
+    }
+
     await rm(destinationDir, { recursive: true, force: true })
+
+    if (link) {
+      await symlink(sourceDir, destinationDir, 'dir')
+      continue
+    }
+
     await copyTree({
       sourceDir,
       targetDir: destinationDir,
@@ -154,5 +168,6 @@ export async function installStableSkills({
   return {
     targetDir: installTargetDir,
     skills: stableSkills,
+    link,
   }
 }

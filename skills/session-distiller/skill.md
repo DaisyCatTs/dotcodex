@@ -19,7 +19,7 @@ Transform a messy, high-context conversation into durable assets that help the u
    Do not directly update memory unless the user explicitly asks for a memory update. When updating memory is useful, produce a concise proposal with evidence and scope.
 
 4. **Prefer local artifacts for serious sessions.**
-   When the user asks for a report, archive, handoff, or durable summary, write a local Markdown artifact in the relevant workspace or personal notes area. For quick chat-only requests, answer inline.
+   When the user asks for a report, archive, handoff, or durable summary, write a local Markdown artifact in the confirmed artifact directory. For quick chat-only requests, answer inline.
 
 5. **Preserve sharp lessons.**
    Capture mistakes, false starts, root causes, commands that actually worked, proxy/host/env details, review objections, and user preferences. These are often more valuable than the final happy path.
@@ -70,6 +70,14 @@ Always separate:
 ### 4. Produce the Right Artifact
 
 Use `references/artifact-templates.md` when writing a longer report.
+
+Before writing a file, decide the artifact directory:
+
+- If the user explicitly names a directory, write there.
+- If the user has an established personal knowledge directory, use it when the request is personal, cross-project, or not clearly tied to the current repo.
+- For this user, the established personal knowledge directory is `/Users/jerret/Places/work/kn`.
+- If the destination is still unclear, ask one concise Chinese question to confirm where the artifact should be written before creating files.
+- For project-bound handoffs or implementation plans, use the relevant project docs or plan directory only when the user clearly asks to keep the artifact with that project.
 
 Default full artifact sections:
 

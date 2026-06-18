@@ -26,6 +26,11 @@ function parseArgs(argv) {
       continue
     }
 
+    if (arg === '--link') {
+      options.link = true
+      continue
+    }
+
     if (arg === '-h' || arg === '--help') {
       options.help = true
       continue
@@ -41,7 +46,7 @@ function printHelp() {
   process.stdout.write(`dotcodex CLI
 
 Usage:
-  dotcodex install [--target <dir>] [--repo-root <dir>]
+  dotcodex install [--target <dir>] [--repo-root <dir>] [--link]
   dotcodex list [--repo-root <dir>]
   dotcodex build-public [--repo-root <dir>]
 
@@ -82,8 +87,10 @@ async function main() {
     const result = await installStableSkills({
       repoRoot,
       targetDir: options.targetDir,
+      link: options.link,
     })
-    process.stdout.write(`Installed ${result.skills.length} stable skills into ${result.targetDir}\n`)
+    const action = result.link ? 'Linked' : 'Installed'
+    process.stdout.write(`${action} ${result.skills.length} stable skills into ${result.targetDir}\n`)
     for (const skillName of result.skills) {
       process.stdout.write(`${skillName}\n`)
     }
